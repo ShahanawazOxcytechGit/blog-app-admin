@@ -16,6 +16,16 @@ const SIDENAV_ITEMS = [
       { title: "All Blog", path: "/blog/all-blog" },
     ],
   },
+  {
+    title: "Employee",
+    path: "/employee/add-employee",
+    icon: <Icon icon="lucide:folder" width="24" height="24" />,
+    submenu: true,
+    subMenuItems: [
+      { title: "Add Employee", path: "/employee/add-employee" },
+      { title: "All Employee", path: "/employee/all-employee" },
+    ],
+  },
 ];
 
 export default SIDENAV_ITEMS;
