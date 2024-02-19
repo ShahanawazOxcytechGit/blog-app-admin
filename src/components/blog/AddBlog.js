@@ -1,14 +1,13 @@
-"use client"
+"use client";
 import React from "react";
-import { useState , useRef, useEffect } from "react";
-import dynamic from 'next/dynamic'; // Import dynamic from next/dynamic
-import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+import { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic"; // Import dynamic from next/dynamic
+import "react-quill/dist/quill.snow.css"; // Import Quill styles
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false }); // Dynamically import ReactQuill
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false }); // Dynamically import ReactQuill
 
-import SunEditor from 'suneditor-react';
-import 'suneditor/dist/css/suneditor.min.css';
-
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css";
 
 const AddBlog = () => {
   const [title, setTitle] = useState("");
@@ -24,41 +23,41 @@ const AddBlog = () => {
   }, [content]);
 
   const handleImageChange = (e) => {
-    console.log('inside handleImageChange')
+    console.log("inside handleImageChange");
     const selectedFile = e.target.files[0];
     setImage(selectedFile);
     setImageName(selectedFile ? selectedFile.name : ""); // Set the file name
   };
-  
+
   const handleAddBlog = async (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('content', content);
-      formData.append('image', image);
-      //   const response = await axios.post('http://localhost:3000/api/addcontmessage', { name, email , mobileNumber , message });
-        console.log('before api , image is' , image)
-        const response = await fetch("/api/addblog", {
-      method: "POST",
-      body: formData,
-    });
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append("title", title);
+    //     formData.append("content", content);
+    //     formData.append("image", image);
+    //     //   const response = await axios.post('http://localhost:3000/api/addcontmessage', { name, email , mobileNumber , message });
+    //     console.log("before api , image is", image);
+    //     const response = await fetch("/api/addblog", {
+    //       method: "POST",
+    //       body: formData,
+    //     });
 
-     const { success1 , error , result } = await response.json();
+    //     const { success1, error, result } = await response.json();
 
-        console.log('Blog Added successfully:', success1);
-        if(error!==undefined) {
-             console.log('Blog Added error:', error);
-        }
-        console.log('Blog Added result:', result);
-           setTitle('');
-          setContent('');
-          setImage(null);
-          setImageName('');
-          } catch (error) {
-          console.error('Blog addition operation error', error);
-      }  };
-
+    //     console.log("Blog Added successfully:", success1);
+    //     if (error !== undefined) {
+    //       console.log("Blog Added error:", error);
+    //     }
+    //     console.log("Blog Added result:", result);
+    //     setTitle("");
+    //     setContent("");
+    //     setImage(null);
+    //     setImageName("");
+    //   } catch (error) {
+    //     console.error("Blog addition operation error", error);
+    //   }
+  };
 
   return (
     <>
@@ -79,16 +78,16 @@ const AddBlog = () => {
                 placeholder="Blog Title"
                 className="text-sm md:text-base md:w-[850px] sm:w-[300px] h-[30px] md:h-[40px] px-2 py-0 border-gray-300 placeholder-gray-500 outline-none rounded-md"
               />
-               <label htmlFor="image" className="p-2 border border-gray-300 relative cursor-pointer text-gray-500 hover:text-blue-700">
-               <span>{imageName ? imageName : "Upload Blog Image"}</span>
+              <label htmlFor="image" className="p-2 border border-gray-300 relative cursor-pointer text-gray-500 hover:text-blue-700">
+                <span>{imageName ? imageName : "Upload Blog Image"}</span>
                 <input
                   type="file"
                   id="image"
                   name="image"
                   onChange={handleImageChange}
                   className="hidden text-sm md:text-base md:w-[850px] sm:w-[300px] h-[30px] md:h-[40px] px-2 py-0 border-gray-300 outline-none rounded-md"
-               />
-               </label>
+                />
+              </label>
               {/* <ReactQuill
                 theme="snow"
                 value={content}
@@ -97,37 +96,37 @@ const AddBlog = () => {
                 className = "bg-gray-100 h-80"
               /> */}
               <SunEditor
-              ref={editorRef}
-              setContents={content}
-              onChange={setContent}
-              placeholder="Blog Content"
-              className="text-black"
-              setOptions={{
-                width:"100px",
-                height: '1000px', // Use px unit for height
-                buttonList: [["undo", "redo"],
-                             ["bold", "underline", "italic", "strike", "subscript", "superscript"],
-                             ["removeFormat"],
-                             ["outdent", "indent"],
-                             ["fullScreen", "showBlocks", "codeView"],
-                             ["preview", "print"],
-                             ['link', 'image', 'video'],
-                              ["font", "fontSize", "formatBlock", "align", "list", "table"],
-                             ["fontColor", "hiliteColor", "horizontalRule"] 
-                        ],
-                font: ["Arial", "Courier New"], // Example: specify fonts
-                fontColor: 'red', // Set font color
-                backgroundColor: 'red', // Set background color
-              }}
-            />
-              
+                ref={editorRef}
+                setContents={content}
+                onChange={setContent}
+                placeholder="Blog Content"
+                className="text-black"
+                setOptions={{
+                  width: "100px",
+                  height: "1000px", // Use px unit for height
+                  buttonList: [
+                    ["undo", "redo"],
+                    ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+                    ["removeFormat"],
+                    ["outdent", "indent"],
+                    ["fullScreen", "showBlocks", "codeView"],
+                    ["preview", "print"],
+                    ["link", "image", "video"],
+                    ["font", "fontSize", "formatBlock", "align", "list", "table"],
+                    ["fontColor", "hiliteColor", "horizontalRule"],
+                  ],
+                  font: ["Arial", "Courier New"], // Example: specify fonts
+                  fontColor: "red", // Set font color
+                  backgroundColor: "red", // Set background color
+                }}
+              />
             </div>
-
-            
           </div>
 
           <div className="flex items-center justify-center gap-2 py-5">
-            <button onClick={handleAddBlog} className="bg-green-500 text-white rounded px-2 py-1">Save</button>
+            <button onClick={handleAddBlog} className="bg-green-500 text-white rounded px-2 py-1">
+              Save
+            </button>
           </div>
         </div>
       </div>

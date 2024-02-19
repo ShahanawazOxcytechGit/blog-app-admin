@@ -81,36 +81,33 @@ export default function AllBlog() {
   );
 
   const handleGetBlogs = async (e) => {
-    try {
-      //   const response = await axios.post('http://localhost:3000/api/addcontmessage', { name, email , mobileNumber , message });
-
-      const response = await fetch("/api/displayblogs", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const { success1, error, result } = await response.json();
-
-      console.log("Blogs Get  successfully:", success1);
-      if (error !== undefined) {
-        console.log("Blogs Get error:", error);
-      }
-      console.log("Blogs Get result:", result);
-      setBlogsData(result);
-      //  setName('');
-      // setEmail('');
-      // setMobileNumber('');
-      // setAddress('')
-    } catch (error) {
-      console.error("Blogs Get operation error", error);
-    }
+    // try {
+    //   //   const response = await axios.post('http://localhost:3000/api/addcontmessage', { name, email , mobileNumber , message });
+    //   const response = await fetch("/api/displayblogs", {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   const { success1, error, result } = await response.json();
+    //   console.log("Blogs Get  successfully:", success1);
+    //   if (error !== undefined) {
+    //     console.log("Blogs Get error:", error);
+    //   }
+    //   console.log("Blogs Get result:", result);
+    //   setBlogsData(result);
+    //   //  setName('');
+    //   // setEmail('');
+    //   // setMobileNumber('');
+    //   // setAddress('')
+    // } catch (error) {
+    //   console.error("Blogs Get operation error", error);
+    // }
   };
 
-  useEffect(() => {
-    handleGetBlogs();
-  }, []);
+  // useEffect(() => {
+  //   handleGetBlogs();
+  // }, []);
 
   const handleBlogEdit = async (row) => {
     setSelectedId(row.original.id);
@@ -124,33 +121,30 @@ export default function AllBlog() {
   };
 
   const handleBlogUpdate = async (e) => {
-    try {
-      const formData = new FormData();
-      console.log("inside handleBlogUpdate title", title);
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("image", image);
-      formData.append("slug", slug);
-      formData.append("selectedId", selectedId);
-      formData.append("previousimage", previousimage);
-
-      const response = await fetch("/api/updateblog", {
-        method: "PUT",
-        body: formData,
-      });
-
-      const { success1, error, result } = await response.json();
-
-      console.log("Customer Updated  successfully:", success1);
-      if (error !== undefined) {
-        console.log("Customer Updated error:", error);
-      }
-      console.log("Customer Updated result:", result);
-      setUpdateModalOpen(false);
-      handleGetBlogs();
-    } catch (error) {
-      console.error("Customer Update operation error", error);
-    }
+    // try {
+    //   const formData = new FormData();
+    //   console.log("inside handleBlogUpdate title", title);
+    //   formData.append("title", title);
+    //   formData.append("content", content);
+    //   formData.append("image", image);
+    //   formData.append("slug", slug);
+    //   formData.append("selectedId", selectedId);
+    //   formData.append("previousimage", previousimage);
+    //   const response = await fetch("/api/updateblog", {
+    //     method: "PUT",
+    //     body: formData,
+    //   });
+    //   const { success1, error, result } = await response.json();
+    //   console.log("Customer Updated  successfully:", success1);
+    //   if (error !== undefined) {
+    //     console.log("Customer Updated error:", error);
+    //   }
+    //   console.log("Customer Updated result:", result);
+    //   setUpdateModalOpen(false);
+    //   handleGetBlogs();
+    // } catch (error) {
+    //   console.error("Customer Update operation error", error);
+    // }
   };
 
   const handleBlogDelete = (row) => {
@@ -160,28 +154,26 @@ export default function AllBlog() {
   };
 
   const confirmDelete = async () => {
-    try {
-      const formData = new FormData();
-      console.log("inside handleBlogUpdate title", title);
-      formData.append("selectedId", selectedId);
-      formData.append("previousimage", previousimage);
-      const response = await fetch("/api/deleteblog", {
-        method: "DELETE",
-        body: formData,
-      });
-
-      const { success1, error, result } = await response.json();
-
-      console.log("Customer Deleted  successfully:", success1);
-      if (error !== undefined) {
-        console.log("Customer Deleted error:", error);
-      }
-      console.log("Customer Deleted result:", result);
-      setDeleteConfirmationOpen(false);
-      handleGetBlogs();
-    } catch (error) {
-      console.error("Customer Delete operation error", error);
-    }
+    // try {
+    //   const formData = new FormData();
+    //   console.log("inside handleBlogUpdate title", title);
+    //   formData.append("selectedId", selectedId);
+    //   formData.append("previousimage", previousimage);
+    //   const response = await fetch("/api/deleteblog", {
+    //     method: "DELETE",
+    //     body: formData,
+    //   });
+    //   const { success1, error, result } = await response.json();
+    //   console.log("Customer Deleted  successfully:", success1);
+    //   if (error !== undefined) {
+    //     console.log("Customer Deleted error:", error);
+    //   }
+    //   console.log("Customer Deleted result:", result);
+    //   setDeleteConfirmationOpen(false);
+    //   handleGetBlogs();
+    // } catch (error) {
+    //   console.error("Customer Delete operation error", error);
+    // }
   };
 
   return (
