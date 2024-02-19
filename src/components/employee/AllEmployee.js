@@ -110,22 +110,26 @@ export default function AllEmployee() {
         header: "Access",
         size: 150,
         Cell: ({ row }) => {
+          const [isBlocked, setIsBlocked] = useState(false);
+
+          const toggleAccess = () => {
+            setIsBlocked(!isBlocked);
+            //perform actions here, such as API calls to update the state on the server
+          };
+
           return (
             <div className="text-xs">
               <div className="flex items-center gap-4">
                 <button
-                  className="px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  className={`px-3 py-1 text-xs text-white rounded focus:outline-none ${
+                    isBlocked
+                      ? "bg-blue-500 hover:bg-blue-600 focus:bg-blue-600"
+                      : "bg-red-500 hover:bg-red-800 focus:bg-red-800"
+                  }`}
                   type="button"
-                  // onClick={() => handleEmployeeEdit(row)}
+                  onClick={toggleAccess}
                 >
-                  Unblock
-                </button>
-                <button
-                  className="px-3 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-800 focus:outline-none focus:bg-red-800"
-                  type="button"
-                  // onClick={() => handleEmployeeDelete(row)}
-                >
-                  Block
+                  {isBlocked ? "Unblock" : "Block"}
                 </button>
               </div>
             </div>
@@ -227,11 +231,11 @@ export default function AllEmployee() {
       <Dialog
         open={isUpdateModalOpen}
         onClose={() => setUpdateModalOpen(false)}
-        maxWidth="sm"
+        maxWidth="xs"
         fullWidth
       >
         <DialogTitle>Update Customer</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ display: "flex", flexDirection: "column", px: 4 }}>
           <TextField
             sx={{ marginTop: 1 }}
             label="Employee Name"
@@ -239,13 +243,13 @@ export default function AllEmployee() {
             onChange={(e) => setName(e.target.value)}
           />
           <TextField
-            sx={{ marginTop: 1, marginLeft: 2 }}
+            sx={{ marginTop: 3 }}
             label="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
-            sx={{ marginTop: 1, marginLeft: 2 }}
+            sx={{ marginTop: 3 }}
             label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

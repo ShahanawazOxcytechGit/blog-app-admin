@@ -28,6 +28,10 @@ const AddEmployee = () => {
       setPassword("");
     } catch (error) {
       console.error("Employee Message addition operation error", error);
+      alert("error");
+      setUsername("");
+      setEmail("");
+      setPassword("");
     }
   };
 
@@ -44,7 +48,7 @@ const AddEmployee = () => {
           <div className="ml-[420px] flex flex-col items-center gap-3 py-5 lg:flex-row lg:justify-between lg:items-start">
             <div className="flex flex-col gap-3">
               <input
-                type="text"
+                type="email"
                 id="email"
                 name="email"
                 value={email}
@@ -62,9 +66,9 @@ const AddEmployee = () => {
                 className="bg-gray-100 text-sm md:text-base w-[200px] sm:w-[300px] h-[30px] md:h-[40px] px-2 py-0 border-none outline-none rounded-md"
               />
               <input
-                type="text"
-                id="mobileno"
-                name="mobileno"
+                type="password"
+                id="password"
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter Password"
