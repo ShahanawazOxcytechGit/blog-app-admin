@@ -26,6 +26,11 @@ const SIDENAV_ITEMS = [
       { title: "All Employee", path: "/employee/all-employee" },
     ],
   },
+  {
+    title: "Tutorial",
+    path: "/tutorial",
+    icon: <Icon icon="lucide:video" width="24" height="24" />,
+  },
 ];
 
 export default SIDENAV_ITEMS;
