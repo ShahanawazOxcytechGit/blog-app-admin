@@ -123,7 +123,7 @@ export default function AllEmployee() {
                 <button
                   className={`px-3 py-1 text-xs text-white rounded focus:outline-none ${
                     isBlocked
-                      ? "bg-blue-500 hover:bg-blue-600 focus:bg-blue-600"
+                      ? "bg-green-500 hover:bg-green-600 focus:bg-green-600"
                       : "bg-red-500 hover:bg-red-800 focus:bg-red-800"
                   }`}
                   type="button"
