@@ -9,6 +9,7 @@ import {
   TextField,
   DialogActions,
 } from "@mui/material";
+import axios from "axios";
 
 export default function AllEmployee() {
   const [employeeData, setEmployeeData] = useState([]);
@@ -18,27 +19,7 @@ export default function AllEmployee() {
   const [selectedId, setSelectedId] = useState();
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-
-  const data = [
-    {
-      email: "example1@example.com",
-      username: "user1",
-      action: "edit/delete",
-      access: "block/unblock",
-    },
-    {
-      email: "example2@example.com",
-      username: "user2",
-      action: "edit/delete",
-      access: "block/unblock",
-    },
-    {
-      email: "example3@example.com",
-      username: "user3",
-      action: "edit/delete",
-      access: "block/unblock",
-    },
-  ];
+  const [access, setAccess] = useState("unblock");
 
   const columns = useMemo(
     () => [
@@ -83,7 +64,7 @@ export default function AllEmployee() {
                 <button
                   className="text-xs text-red-700 "
                   type="button"
-                  onClick={() => handleEmployeeDelete(row)}
+                  onClick={() => handleEmployeDelete(row)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -140,28 +121,18 @@ export default function AllEmployee() {
     []
   );
 
-  const handleGetEmployee = async (e) => {
+  const getAllEmployees = async () => {
     try {
-      const response = await fetch("/api/displayemployee", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const { error, result } = await response.json();
-
-      if (error !== undefined) {
-        console.log("Employee Get error:", error);
-      }
-      setEmployeeData(result);
+      const response = await axios.get("/api/get-all-employees");
+      const data = response.data;
+      setEmployeeData(data);
     } catch (error) {
-      console.error("Employee Get operation error", error);
+      console.error("Error fetching all employees:", error);
     }
   };
 
   useEffect(() => {
-    handleGetEmployee();
+    getAllEmployees();
   }, []);
 
   const handleEmployeeEdit = async (row) => {
@@ -172,53 +143,39 @@ export default function AllEmployee() {
   };
 
   const handleEmployeeUpdate = async (e) => {
+    const body = {
+      selectedId,
+      email,
+      username,
+      password,
+      access,
+      action: "edit",
+    };
     try {
-      const response = await fetch("/api/updateemployee", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          selectedId,
-          username,
-          email,
-        }),
-      });
-
-      const { error, result } = await response.json();
-
-      if (error !== undefined) {
-        console.log("Employee Updated error:", error);
-      }
+      const response = await axios.put("/api/update-employee", body);
+      alert("Employee updated successfully");
       setUpdateModalOpen(false);
-      handleGetEmployee();
+      setPassword("");
+
+      getAllEmployees();
     } catch (error) {
       console.error("Employee Update operation error", error);
     }
   };
 
-  const handleEmployeeDelete = (row) => {
+  const handleEmployeDelete = (row) => {
     setSelectedId(row.original.id);
     setDeleteConfirmationOpen(true);
   };
 
   const confirmDelete = async () => {
     try {
-      const response = await fetch("/api/deleteemployee", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ selectedId }),
+      const response = await axios.delete("/api/delete-employee", {
+        data: { selectedId },
       });
-
-      const { error, result } = await response.json();
-
-      if (error !== undefined) {
-        console.log("Employee Deleted error:", error);
-      }
+      console.log(response.data.message);
       setDeleteConfirmationOpen(false);
-      handleGetEmployee();
+      getAllEmployees();
     } catch (error) {
       console.error("Employee Delete operation error", error);
     }
@@ -227,7 +184,7 @@ export default function AllEmployee() {
   return (
     <>
       <h2 className="text-2xl font-bold">EMPLOYEE LIST</h2>
-      <CommonTable columns={columns} data={data} />
+      <CommonTable columns={columns} data={employeeData} />
       <Dialog
         open={isUpdateModalOpen}
         onClose={() => setUpdateModalOpen(false)}
@@ -240,7 +197,7 @@ export default function AllEmployee() {
             sx={{ marginTop: 1 }}
             label="Employee Name"
             value={username}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
             sx={{ marginTop: 3 }}

@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
 
@@ -9,41 +10,33 @@ const AddEmployee = () => {
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
+    const body = {
+      email,
+      username,
+      password,
+      access: "unblock",
+      action: "edit",
+    };
     try {
-      const response = await fetch("/api/addemployee", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, username, password }),
-      });
-
-      const { error, result } = await response.json();
-
-      if (error !== undefined) {
-        console.log("Employee Added error:", error);
-      }
+      const response = await axios.post("/api/add-employee", body);
+      const result = response.data;
+      console.log("Employee Added successfully:", result);
+      alert("Employee added successfully");
       setUsername("");
       setEmail("");
       setPassword("");
     } catch (error) {
-      console.error("Employee Message addition operation error", error);
-      alert("error");
-      setUsername("");
-      setEmail("");
-      setPassword("");
+      console.error("Employee addition operation error", error);
     }
   };
 
   return (
     <>
       <div className="my-5 bg-white rounded-md shadow-[0px_5px_20px_lightgray] mb-20">
-        <h1 className="p-4 text-3xl font-semibold text-cyan-900">
-          Add Employee
-        </h1>
+        <h1 className="p-4 text-3xl font-semibold">Add Employee</h1>
 
         <div className="p-2 rounded-md md:p-5 bg-white">
-          <h2 className="ml-[420px] text-2xl text-cyan-900 font-semibold uppercase">
+          <h2 className="ml-[420px] text-2xl  font-semibold uppercase">
             Employee Details
           </h2>
 
