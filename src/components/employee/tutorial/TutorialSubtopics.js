@@ -10,15 +10,17 @@ import {
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import CommonTable from "@/components/common/CommonTable";
+import axios from "axios";
 
 const TutorialSubtopics = () => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-  const [isDeleteDialog, setDeleteDialog] = useState(false);
+  const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [metadata, setMetadata] = useState("");
   const [content, setContent] = useState("");
   const [selectedId, setSelectedId] = useState();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [isDeleteDialog, setDeleteDialog] = useState(false);
 
   const editorRef = useRef();
 
@@ -28,41 +30,85 @@ const TutorialSubtopics = () => {
     }
   }, [content]);
 
+  const getAllTutorials = async () => {
+    try {
+      const response = await axios.get("/api/get-all-tutorial-subtopics");
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching all tutorials:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllTutorials();
+  }, []);
+
   const handleAddTutorial = () => {
     setOpenDialog(true);
+  };
+  const handleAddTutorialApi = async () => {
+    const body = { title, metadata, content };
+    try {
+      const response = await axios.post("/api/add-tutorial-subtopic", body);
+      console.log(response);
+      alert("tutorial added successfully");
+      getAllTutorials();
+      setTitle("");
+      setMetadata("");
+      setContent("");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setOpenDialog(false);
+    }
+  };
+
+  const handleUpdate = (row) => {
+    setUpdateModalOpen(true);
+    setSelectedId(row.original.id);
+    setTitle(row.original.title);
+    setMetadata(row.original.metadata);
+    setContent(row.original.content);
+  };
+
+  const handleUpdateApi = async (e) => {
+    const body = { selectedId, title, metadata, content };
+
+    try {
+      const response = await axios.put("/api/update-tutorial-subtopic", body);
+      alert("Employee updated successfully");
+      getAllTutorials();
+      setTitle("");
+      setMetadata("");
+      setContent("");
+      setUpdateModalOpen(false);
+    } catch (error) {
+      console.error("tutorial Update operation error", error);
+    }
   };
 
   const handleDelete = (row) => {
     setDeleteDialog(true);
     setSelectedId(row.original.id);
   };
-  const handleUpdate = (row) => {
-    setUpdateModalOpen(true);
-    setSelectedId(row.original.id);
-  };
 
-  const data = [
-    {
-      serial: "1",
-      title: "title1",
-      action: "edit/delete",
-    },
-    {
-      serial: "2",
-      title: "title2",
-      action: "edit/delete",
-    },
-    {
-      serial: "3",
-      title: "title3",
-      action: "edit/delete",
-    },
-  ];
+  const handleDeleteApi = async () => {
+    try {
+      const response = await axios.delete("/api/delete-tutorial-subtopic", {
+        data: { selectedId },
+      });
+      console.log(response.data.message);
+      setDeleteDialog(false);
+      getAllTutorials();
+    } catch (error) {
+      console.error("Delete operation error", error);
+    }
+  };
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: "serial",
+        accessorKey: "id",
         header: "Serial No.",
       },
       {
@@ -159,7 +205,7 @@ const TutorialSubtopics = () => {
                 name="metadata"
                 value={metadata}
                 onChange={(e) => setMetadata(e.target.value)}
-                placeholder="Blog Metadata"
+                placeholder="Tutorial Metadata"
                 className="text-sm md:text-base md:w-[850px] sm:w-[300px] h-[30px] md:h-[40px] px-2 py-0 border-gray-300 placeholder-gray-500 outline-none rounded-md"
               />
 
@@ -206,12 +252,17 @@ const TutorialSubtopics = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-          <Button>Save</Button>
+          <Button onClick={handleAddTutorialApi}>Save</Button>
         </DialogActions>
       </Dialog>
       <Dialog
         open={isUpdateModalOpen}
-        onClose={() => setUpdateModalOpen(false)}
+        onClose={() => {
+          setUpdateModalOpen(false);
+          setTitle("");
+          setMetadata("");
+          setContent("");
+        }}
         maxWidth="md"
         fullWidth
       >
@@ -280,7 +331,7 @@ const TutorialSubtopics = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setUpdateModalOpen(false)}>Cancel</Button>
-          <Button>Update</Button>
+          <Button onClick={handleUpdateApi}>Update</Button>
         </DialogActions>
       </Dialog>
       <Dialog open={isDeleteDialog} onClose={() => setDeleteDialog(false)}>
@@ -289,11 +340,17 @@ const TutorialSubtopics = () => {
           <p>Are you sure you want to delete this Tutorial?</p>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialog(false)}>Cancel</Button>
           <Button
-            // onClick={confirmDelete}
-            color="error"
+            onClick={() => {
+              setDeleteDialog(false);
+              setTitle("");
+              setMetadata("");
+              setContent("");
+            }}
           >
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteApi} color="error">
             Delete
           </Button>
         </DialogActions>
