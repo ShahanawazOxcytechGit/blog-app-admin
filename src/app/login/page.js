@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
@@ -14,7 +14,7 @@ const Page = () => {
 
     try {
       const res = await signIn("credentials", {
-        email,
+        username,
         password,
         redirect: false,
       });
@@ -37,31 +37,44 @@ const Page = () => {
         scrollbarColor: "white white",
         scrollbarWidth: "thin",
         height: "100vh",
-      }}>
-      <form className="bg-white p-8 shadow-md w-96 rounded" onSubmit={handleLogin} style={{ width: 500 }}>
+      }}
+    >
+      <form
+        className="bg-white p-8 shadow-md w-96 rounded"
+        onSubmit={handleLogin}
+        style={{ width: 500 }}
+      >
         <br />
         <h4 className="text-2xl mb-4">
           <b>Sign in to account</b>
         </h4>
-        <p style={{ fontFamily: "sans-serif", color: "gray" }}>Enter your email & password to login</p>
+        <p style={{ fontFamily: "sans-serif", color: "gray" }}>
+          Enter your username & password to login
+        </p>
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
-            Email Address
+          <label
+            htmlFor="username"
+            className="block text-gray-700 font-bold mb-2"
+          >
+            Username
           </label>
           <input
             type="text"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="username"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="border rounded w-full p-2"
             placeholder="Test@gmail.com"
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="password"
+            className="block text-gray-700 font-bold mb-2"
+          >
             Password
           </label>
           <input
@@ -74,16 +87,13 @@ const Page = () => {
             placeholder="******"
           />
         </div>
-        <button type="submit" className="bg-gray-900 text-white rounded py-2 px-4 hover:bg-blue-600" style={{ width: 435 }}>
+        <button
+          type="submit"
+          className="bg-gray-900 text-white rounded py-2 px-4 hover:bg-blue-600"
+          style={{ width: 435 }}
+        >
           Sign in
         </button>
-
-        <div className="mt-2">
-          Dont have an account?
-          <Link href="/sign-up" className="font-bold text-blue-700 ml-2 hover:underline">
-            Create account
-          </Link>
-        </div>
       </form>
     </div>
   );
