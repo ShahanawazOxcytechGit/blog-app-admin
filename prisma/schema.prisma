@@ -26,3 +26,11 @@ model TutorialSubtopic {
   metadata String?
   content String
 }
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  metaData  String?
+  image     String
+  content   String?
+}
