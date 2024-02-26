@@ -76,29 +76,16 @@ const AddBlog = () => {
                 placeholder="Blog MetaData"
                 className="text-sm md:text-base md:w-[850px] sm:w-[300px] h-[30px] md:h-[40px] px-2 py-0 border-gray-300 placeholder-gray-500 outline-none rounded-md"
               />
-              <label
-                htmlFor="image"
-                className="p-2 border border-gray-300 relative cursor-pointer text-gray-500 hover:text-blue-700"
-              >
-                <span>{imageName ? imageName : "Upload Blog Image"}</span>
-                <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  onChange={handleImageChange}
-                  className="hidden text-sm md:text-base md:w-[850px] sm:w-[300px] h-[30px] md:h-[40px] px-2 py-0 border-gray-300 outline-none rounded-md"
-                />
-              </label>
-
               <SunEditor
                 ref={editorRef}
                 setContents={content}
                 onChange={setContent}
+                height="300px"
                 placeholder="Blog Content"
                 className="text-black"
                 setOptions={{
                   width: "100px",
-                  height: "1000px", // Use px unit for height
+                  height: "100%",
                   buttonList: [
                     ["undo", "redo"],
                     [
@@ -129,8 +116,22 @@ const AddBlog = () => {
                   backgroundColor: "red", // Set background color
                 }}
               />
+              <label
+                htmlFor="image"
+                className="p-2 border border-gray-300 relative cursor-pointer text-gray-500 hover:text-blue-700"
+              >
+                <span>{imageName ? imageName : "Upload Blog Image"}</span>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={handleImageChange}
+                  className="hidden text-sm md:text-base md:w-[850px] sm:w-[300px] h-[30px] md:h-[40px] px-2 py-0 border-gray-300 outline-none rounded-md"
+                />
+              </label>
             </div>
           </div>
+
           <div className="flex items-center justify-center gap-2 py-5">
             <button
               onClick={handleAddBlog}

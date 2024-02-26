@@ -213,10 +213,11 @@ const TutorialSubtopics = () => {
                 ref={editorRef}
                 setContents={content}
                 onChange={setContent}
+                height="200px"
                 placeholder="Tutorial Content"
                 setOptions={{
                   width: "100%", // Use percentage for width
-                  height: "400px", // Use px unit for height
+                  height: "100%", // Use px unit for height
                   buttonList: [
                     ["undo", "redo"],
                     [
