@@ -1,9 +1,11 @@
-import pool from "@/database/db";
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaClient } from "@prisma/client";
 
-export const authOption = {
+const prisma = new PrismaClient();
+
+export const authOptions = {
   pages: {
     signIn: "/login",
   },
@@ -11,25 +13,28 @@ export const authOption = {
     CredentialsProvider({
       name: "credentials",
       credentials: {},
-
       async authorize(credentials) {
         try {
-          const connection = await pool.getConnection();
-          if (!credentials?.email || !credentials?.password) {
+          const { username, password } = credentials;
+          if (!username || !password) {
             return null;
           }
-          let user = await connection.query(`SELECT * FROM admin WHERE email = '${credentials.email}'`);
-          user = user[0][0];
 
-          if (!user) {
+          let admin = await prisma.admin.findUnique({
+            where: { username },
+          });
+
+          if (!admin) {
             return null;
           }
-          if (user.password) {
-            return user.password === credentials.password ? user : null;
+          if (admin.password === password) {
+            return NextResponse.json(admin);
+          } else {
+            return null;
           }
-          connection.release();
         } catch (error) {
-          return NextResponse.json({ status: 400, errors: error.messages });
+          console.error("Authentication error:", error);
+          return null;
         }
       },
     }),
@@ -37,5 +42,5 @@ export const authOption = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-const handler = NextAuth(authOption);
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
